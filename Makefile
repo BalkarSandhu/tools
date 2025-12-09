@@ -102,14 +102,14 @@ COMSPEED?=	115200
 DEBUG?=		# empty
 DEVICE?=	A10
 KERNEL?=	SMP
-NAME?=		Dadhwal
+NAME?=		opnsense
 SUFFIX?=	# empty
 TYPE?=		${NAME:tl}
 UEFI?=		arm dvd serial vga vm
 VERSION?=	${_VERSION}
 ZFS?=		# empty
 
-GITBASE?=	https://github.com/opnsense
+GITBASE?=	https://github.com/BalkarSandhu
 MIRRORS?=	https://opnsense.c0urier.net \
 		https://mirrors.nycbug.org/pub/opnsense \
 		https://mirror.wdc1.us.leaseweb.net/opnsense \
