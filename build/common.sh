@@ -480,9 +480,7 @@ setup_clone()
 	echo ">>> Setting up ${2} clone in ${1}"
 
 	# repositories may be huge so avoid the copy :)
-	# mkdir -p ${1}${2} && mount_unionfs -o below ${2} ${1}${2}
-	mkdir -p ${1}${2}
-	cp -a ${2}/. ${1}${2}/
+	mkdir -p ${1}${2} && mount_unionfs -o below ${2} ${1}${2}
 }
 
 setup_copy()
@@ -837,7 +835,7 @@ search_packages()
 	if [ -L ${PKGLINK} ]; then
 		PKGFILE=$(readlink -f ${PKGLINK} || true)
 		if [ -f ${PKGFILE} ]; then
-			echo ">>> Skipped ${PKGNAME}-${PKGVERS} via ${PKGBRCH}" >> ${BASEDIR}/.pkg-msg
+			echo ">>> Skipped version ${PKGVERS} for ${PKGNAME} from ${PKGBRCH}" >> ${BASEDIR}/.pkg-msg
 			return 0
 		fi
 	fi
@@ -993,7 +991,7 @@ EOF
 	)
 
 	if [ -n "${PRODUCT_REBUILD}" ]; then
-		echo ">>> Rebuilt ${4}-${5} via ${6}" >> ${1}/.pkg-msg
+		echo ">>> Rebuilt version ${5} for ${4} from ${6}" >> ${1}/.pkg-msg
 	fi
 }
 

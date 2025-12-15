@@ -143,6 +143,7 @@ UNAME_r=\$(freebsd-version)
 	# under a different version number
 	PKGNAME=\$(basename \${PKGFILE})
 	PKGNAME=\${PKGNAME%%-[0-9]*}
+	PORT_DESCR="\${PORT_ORIGIN} (\${PKGNAME})"
 	PKGLINK=${PACKAGESDIR}/Latest/\${PKGNAME}.pkg
 	if [ -L \${PKGLINK} ]; then
 		PKGFILE=\$(readlink -f \${PKGLINK} || true)
@@ -151,7 +152,7 @@ UNAME_r=\$(freebsd-version)
 				rm ${PACKAGESDIR}*/All/\$(basename \${PKGFILE})
 			else
 				PKGVERS=\$(make -C ${PORTSDIR}/\${PORT} -v PKGVERSION \${MAKE_ARGS})
-				echo ">>> Skipped \${PKGNAME}-\${PKGVERS} via \${PORT_ORIGIN}" >> /.pkg-msg
+				echo ">>> Skipped version \${PKGVERS} for \${PORT_DESCR}" >> /.pkg-msg
 				continue
 			fi
 		fi
@@ -161,12 +162,12 @@ UNAME_r=\$(freebsd-version)
 
 	if ! make -C ${PORTSDIR}/\${PORT} install \
 	    USE_PACKAGE_DEPENDS=yes \${MAKE_ARGS}; then
-		echo ">>> Aborted \${PKGNAME}-\${PKGVERS} via \${PORT_ORIGIN}" >> /.pkg-err
+		echo ">>> Aborted version \${PKGVERS} for \${PORT_DESCR}" >> /.pkg-err
 
 		CONTINUE=
 
 		if [ ${BATCH} = "no" ]; then
-			echo ">>> Interactive shell for \${PORT_ORIGIN} (use \"exit 1\" to abort)"
+			echo ">>> Interactive shell for \${PORT_DESCR} (use \"exit 1\" to abort)"
 			(cd ${PORTSDIR}/\${PORT}; sh < /dev/tty) || exit 1
 			CONTINUE=1
 		fi
@@ -178,12 +179,12 @@ UNAME_r=\$(freebsd-version)
 		make -C ${PORTSDIR}/\${PORT} clean \${MAKE_ARGS}
 		continue
 	elif ! CHECK_PLIST=\$(make -C ${PORTSDIR}/\${PORT} check-plist \${MAKE_ARGS} 2>&1); then
-		echo ">>> Package list inconsistency for \${PORT_ORIGIN}" >> /.pkg-msg
+		echo ">>> Package list inconsistency for \${PORT_DESCR}" >> /.pkg-msg
 		echo "\${CHECK_PLIST}" >> /.pkg-msg
 	fi
 
 	if [ -n "${PRODUCT_REBUILD}" ]; then
-		echo ">>> Rebuilt \${PKGNAME}-\${PKGVERS} via \${PORT_ORIGIN}" >> /.pkg-msg
+		echo ">>> Rebuilt version \${PKGVERS} for \${PORT_DESCR}" >> /.pkg-msg
 	fi
 
 	for PKGNAME in \$(pkg query %n); do
